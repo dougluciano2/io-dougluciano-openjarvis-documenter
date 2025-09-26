@@ -1,4 +1,4 @@
-package io.dougluciano.skelleton;
+package io.dougluciano.ai.openjarvis.documenter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

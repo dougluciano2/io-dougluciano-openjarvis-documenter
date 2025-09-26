@@ -1,4 +1,4 @@
-package io.dougluciano.skelleton;
+package io.dougluciano.ai.openjarvis.documenter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
