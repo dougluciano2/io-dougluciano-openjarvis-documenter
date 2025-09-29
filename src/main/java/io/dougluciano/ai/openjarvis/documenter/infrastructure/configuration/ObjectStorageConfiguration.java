@@ -1,4 +1,4 @@
-package io.dougluciano.ai.openjarvis.documenter.configuration;
+package io.dougluciano.ai.openjarvis.documenter.infrastructure.configuration;
 
 import io.dougluciano.ai.openjarvis.documenter.enums.LoggerMessages;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 
 import java.net.URI;
-import java.util.NoSuchElementException;
 
 @Configuration
 @Slf4j
@@ -34,7 +33,7 @@ public class ObjectStorageConfiguration {
 
     @Bean
     public S3Client s3Client(){
-        log.info(LoggerMessages.MINIO_START.getValue());
+        log.info(LoggerMessages.OBJECT_STORAGE_START.getValue());
 
         AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
         Region region = Region.US_EAST_1;
@@ -52,23 +51,23 @@ public class ObjectStorageConfiguration {
                     .bucket(bucketName)
                     .build();
             s3Client.headBucket(headBucketRequest);
-            log.info(LoggerMessages.MINIO_BUCKET_ALREADY_EXISTS.getValue(), bucketName);
+            log.info(LoggerMessages.OBJECT_STORAGE_ALREADY_EXISTS.getValue(), bucketName);
 
         } catch (NoSuchBucketException e){
-            log.info(LoggerMessages.MINIO_BUCKET_NOT_FOUND.getValue(), bucketName);
+            log.info(LoggerMessages.OBJECT_STORAGE_BUCKET_NOT_FOUND.getValue(), bucketName);
             try {
                 CreateBucketRequest createBucketRequest = CreateBucketRequest.builder()
                         .bucket(bucketName)
                         .build();
                 s3Client.createBucket(createBucketRequest);
-                log.info(LoggerMessages.MINIO_BUCKET_CREATE_SUCCESS.getValue(), bucketName);
+                log.info(LoggerMessages.OBJECT_STORAGE_CREATE_SUCCESS.getValue(), bucketName);
             } catch (Exception ex){
-                log.error(LoggerMessages.MINIO_BUCKET_START_ERROR.getValue(), ex);
-                throw new RuntimeException(LoggerMessages.MINIO_BUCKET_CREATE_ERROR.getValue(), ex);
+                log.error(LoggerMessages.OBJECT_STORAGE_START_ERROR.getValue(), ex);
+                throw new RuntimeException(LoggerMessages.OBJECT_STORAGE_CREATE_ERROR.getValue(), ex);
             }
         } catch (Exception ex) {
-            log.error(LoggerMessages.MINIO_BUCKET_START_ERROR.getValue(), ex);
-            throw new RuntimeException(LoggerMessages.MINIO_BUCKET_CREATE_ERROR.getValue(), ex);
+            log.error(LoggerMessages.OBJECT_STORAGE_START_ERROR.getValue(), ex);
+            throw new RuntimeException(LoggerMessages.OBJECT_STORAGE_CREATE_ERROR.getValue(), ex);
         }
 
         return s3Client;
