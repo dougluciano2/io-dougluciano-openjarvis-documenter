@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
@@ -37,7 +38,7 @@ public class ObjectStorageService {
      * O S3Presiner é responsável por criar URL's assinadas.
      * Criamos ele a partir da configuração do S3Client principal para garantir consistência
      */
-    public ObjectStorageService(S3Client s3Client, @Value("${object.storage.bucket-name}") String bucketName) {
+    public ObjectStorageService(S3Client s3Client, S3Configuration s3Configuration, @Value("${object.storage.bucket-name}") String bucketName) {
         this.s3Client = s3Client;
         this.bucketName = bucketName;
 
@@ -45,6 +46,7 @@ public class ObjectStorageService {
                 .region(s3Client.serviceClientConfiguration().region())
                 .credentialsProvider(s3Client.serviceClientConfiguration().credentialsProvider())
                 .endpointOverride(s3Client.serviceClientConfiguration().endpointOverride().orElse(null))
+                .serviceConfiguration(s3Configuration)
                 .build();
     }
 

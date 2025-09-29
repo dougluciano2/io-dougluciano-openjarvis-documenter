@@ -9,6 +9,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
@@ -30,6 +31,14 @@ public class ObjectStorageConfiguration {
 
     @Value("${object.storage.bucket-name}")
     private String bucketName;
+
+
+    @Bean
+    public S3Configuration s3Configuration(){
+        return S3Configuration.builder()
+                .pathStyleAccessEnabled(true)
+                .build();
+    }
 
     @Bean
     public S3Client s3Client(){
